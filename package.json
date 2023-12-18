@@ -1,0 +1,60 @@
+{
+    "version": "0.0.1",
+
+    "name": "schemaing",
+    "description": "Schema validation for parsed JSON",
+    "keywords": [
+        "scheme",
+        "schema",
+        "validate",
+        "validation",
+        "validator",
+        "compare"
+    ],
+    "homepage": "https://github.com/crowbartools/schemaing#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/crowbartools/schemaing.git"
+    },
+    "bugs": {
+        "url": "https://github.com/crowbartools/schemaing/issues"
+    },
+
+    "author": "CrowbarTools (https://discord.gg/DegW792)",
+
+    "source": "./src/index.ts",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "require": "./dist/index.cjs",
+        "default": "./dist/index.js"
+    },
+    "scripts": {
+        "test": "jest",
+        "build": "microbundle --target=node  --format=esm,cjs"
+    },
+    "devDependencies": {
+        "jest": "29.1.1",
+        "microbundle": "^0.15.1",
+        "ts-jest": "29.1.1",
+        "typescript": "^5.3.3"
+    },
+
+    "jest": {
+        "cache": false,
+        "preset": "ts-jest/presets/default-esm",
+        "collectCoverage": true,
+        "coverageDirectory": "coverage",
+        "testEnvironment": "node",
+        "testMatch": [
+            "**/*.spec.ts"
+        ],
+        "transform": {
+            "^.+\\.tsx?$": [
+                "ts-jest",
+                { "diagnostics": { "ignoreCodes": [ "TS151001" ] } }
+            ]
+        }
+    }
+}

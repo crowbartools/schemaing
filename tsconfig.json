@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "rootDir": ".",
+        "target": "ESNext",
+        "outDir": "./dist",
+        "skipLibCheck": true
+    },
+    "files": ["src/index.ts"]
+}
