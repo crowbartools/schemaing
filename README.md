@@ -1,3 +1,5 @@
+# Schemaing
+This is a work-in-progress repository for a schema-based validator
 
 # License
 Copyright 2023 CrowbarTools
