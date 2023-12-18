@@ -9,7 +9,7 @@ The `any` Schema represents a value that can be anything
 | Property | Value | Required | Description |
 |--|--|--|--|
 | `type` | `'any'` | yes | |
-| `validate` | [`Validate`]() | no | Validator function to call if the input passes internal |
+| `validate` | [`Validate`](#validate) | no | Validator function to call if the input passes internal |
 
 #### Examples
 ```js
@@ -134,7 +134,7 @@ The `string` Schema represents text values
 | `notEmpty` | `boolean` | no | Input must not be empty |
 | `match` | `RegExp` | no | Input must match the specified regexp |
 | `is` | `string` | no | Input must be the given value |
-| `validate` | [`Validate`]() | no | Validator function to call if the input passes internal | tests |
+| `validate` | [`Validate`](#validate) | no | Validator function to call if the input passes internal | tests |
 
 #### Examples
 ```js
@@ -170,7 +170,7 @@ The `array` Schema represents an order lists of values
 | `as` | `Schema | Schema[]` | no | All items of the value must match the specified schema |
 | `content` | `Array<Schema | Schema[]>` | no | Value's first items must match the specified items in order |
 | `contentIgnoresAs` | `boolean` | no | Items constrainted by `content` will not be constrained by `as` |
-| `validate` | [Validate]() | no | Validator function to call if the input passes internal |
+| `validate` | [Validate](#validate) | no | Validator function to call if the input passes internal |
 
 \* If `content` is not specified then `as` MUST be specified.
 
@@ -193,7 +193,7 @@ The `object` Schema represents an unorder lists of known key-value items
 | `type` | `'object'` | yes | |
 | `properties` | `Properties` | yes | Properties the value must contain |
 | `allowExtraProperties` | `boolean` | no | Allows the value to contain properties not listed by `properties` |
-| `validate` | [Validate]() | no | Validator function to call if the input passes internal tests |
+| `validate` | [Validate](#validate) | no | Validator function to call if the input passes internal tests |
 
 #### Properties
 `properties` is an object literal containing known keys and their respective schema
@@ -230,7 +230,7 @@ The `record` Schema represents an unorder lists of unknown key-value items
 | `type` | `'record'` | yes | |
 | `keys` | `RecordKeys | RecordKeys[]` | yes | Schema to apply to the keys of the value |
 | `values` | `Schema | Schema[]` | yes | Schema to apply to values associated with each key |
-| `validate` | [`Validate`]() | no | Validator function to call if the input passes internal tests |
+| `validate` | [`Validate`](#validate) | no | Validator function to call if the input passes internal tests |
 
 #### RecordKeys
 A constrained list of schemas:
