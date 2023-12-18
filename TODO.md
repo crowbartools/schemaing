@@ -10,8 +10,6 @@ All things listed here are required before the v1.0.0 release
 * Tests
 
 ### src/schemas/record.ts
-* Validate validateSchema()'s schema.keys
-* Validate validateSchema()'s schema.values
 * Tests
 
 ### src/index.ts
