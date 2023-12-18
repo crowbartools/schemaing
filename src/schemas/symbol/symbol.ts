@@ -4,10 +4,6 @@ export interface Schema extends SchemaBase {
     type: 'symbol';
 }
 
-export const aliases = {
-    'symbol': { type: 'symbol' }
-};
-
 export const validateSchema = (schema?: any) : schema is Schema => {
     return validateSchemaBase<Schema>(schema, 'symbol');
 }

@@ -3,7 +3,7 @@ declare const describe: import('@jest/types').Global.GlobalAdditions['describe']
 declare const it:       import('@jest/types').Global.GlobalAdditions['it'];
 declare const expect:   import('@jest/expect').JestExpect;
 
-import { default as validateAgainstSchema, aliases, validateSchema } from './literal';
+import { default as validateAgainstSchema, validateSchema } from './literal';
 
 describe('Schema: Literal', () => {
 
@@ -12,23 +12,6 @@ describe('Schema: Literal', () => {
             expect(validateSchema({type: 'literal'})).toBe(true);
             expect(validateSchema()).toBe(false);
             expect(validateSchema({ type: 'invalid' })).toBe(false);
-        });
-    });
-
-    describe('aliases', () => {
-        it('has aliases object', () => {
-            expect(aliases != null && typeof aliases === 'object').toBe(true);
-        });
-        it('entries are valid schema', () => {
-            const check = () => {
-                for (const [key, value] of Object.entries(aliases)) {
-                    if (!validateSchema(value)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            expect(check()).toBe(true);
         });
     });
 

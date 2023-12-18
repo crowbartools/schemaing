@@ -5,13 +5,6 @@ export interface Schema extends SchemaBase {
     is?: boolean;
 };
 
-export const aliases = {
-    'boolean': { type: 'boolean' },
-    'bool': { type: 'boolean' },
-    'true': { type: 'boolean', is: true },
-    'false': { type: 'boolean', is: false }
-};
-
 export const validateSchema = (schema?: any) : schema is Schema => (
     (
         validateSchemaBase<Schema>(schema, 'boolean') ||

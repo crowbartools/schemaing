@@ -12,25 +12,34 @@ import * as schemaString from './schemas/string/string';
 import * as schemaSymbol from './schemas/symbol/symbol';
 import * as schemaUndefined from './schemas/undefined/undefined';
 
-const schemaAliases : Map<string, SchemaBase> = new Map();
-[
-    schemaAny,
-    schemaArray,
-    schemaBoolean,
-    schemaLiteral,
-    schemaNull,
-    schemaNumber,
-    schemaObject,
-    schemaRecord,
-    schemaString,
-    schemaSymbol,
-    schemaUndefined
-].forEach(schema => {
-    const aliasList = schema.aliases;
-    for (const [key, schema] of Object.entries(aliasList)) {
-        schemaAliases.set(key, <SchemaBase>schema);
-    }
-});
+const aliases = {
+    'any': { type: 'any' },
+    'unknown': { type: 'unknown' },
+    'array': { type: 'array', as: 'any' },
+    'boolean': { type: 'boolean' },
+    'bool': { type: 'boolean' },
+    'true': { type: 'boolean', is: true },
+    'false': { type: 'boolean', is: false },
+    'null': { type: 'null' },
+    'nullish': { type: 'null', allowUndefined: true },
+    'null~': { type: 'null', loose: true },
+    'number': { type: 'number' },
+    'number~': { type: 'number', loose: true },
+    'int': { type: 'number', integer: true },
+    'int~': { type: 'number', integer: true, loose: true },
+    'uint': { type: 'number', unsigned: true, integer: true },
+    'uint~': { type: 'number', unsigned: true, integer: true, loose: true },
+    'object': { type: 'object', allowExtraProperties: true, properties: {} },
+    'record': { type: 'record', keys: 'string!', values: 'any'},
+    'string': { type: 'string' },
+    'string!': { type: 'string', notEmpty: true },
+    'symbol': { type: 'symbol' },
+    'undefined': { type: 'undefined' },
+    'void': { type: 'undefined' }
+};
+
+const schemaAliases : Map<string, SchemaBase> = new Map(Object.entries(aliases));
+
 
 export type SchemaDefinitions = (
     schemaAny.Schema
@@ -48,17 +57,7 @@ export type SchemaDefinitions = (
 
 export type Schema = (
     SchemaDefinitions
-    | keyof typeof schemaAny.aliases
-    | keyof typeof schemaArray.aliases
-    | keyof typeof schemaBoolean.aliases
-    | keyof typeof schemaLiteral.aliases
-    | keyof typeof schemaNull.aliases
-    | keyof typeof schemaNumber.aliases
-    | keyof typeof schemaObject.aliases
-    | keyof typeof schemaRecord.aliases
-    | keyof typeof schemaString.aliases
-    | keyof typeof schemaSymbol.aliases
-    | keyof typeof schemaUndefined.aliases
+    | keyof typeof aliases
 );
 
 export const validateSchema = (schema: unknown) : boolean => {

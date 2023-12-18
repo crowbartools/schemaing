@@ -1,32 +1,22 @@
 import { validateSchema as validateSchemaBase, SchemaBase } from '../_base';
-
-import {
-    default as validateAgainstSchema,
-    validateSchema as validateGlobalSchema,
-    Schema as Schemas
-} from '../../index';
-
+import { default as validateAgainstSchema, validateSchema as validateGlobalSchema, Schema as Schemas } from '../../index';
 import undefinedOrBoolean from '../../common/undefined-or-boolean';
 
 export interface Schema extends SchemaBase {
     type: 'array';
-    content?: Array<Schemas | Schemas[]>;
     contentIgnoresAs?: boolean;
     allowExtraItems?: boolean;
-    as?: Schemas | Schemas[];
     notEmpty?: boolean;
+    content?: Array<Schemas | Schemas[]>;
+    as?: Schemas | Schemas[];
     validate?: (value: unknown) => Promise<boolean>;
-};
-
-export const aliases = {
-    'array': { type: 'array', as: 'any'}
 };
 
 export const validateSchema = (schema?: any) : schema is Schema => {
     if (
         !validateSchemaBase<Schema>(schema, 'array') ||
         (schema.content !== undefined && !Array.isArray(schema.content)) ||
-        !undefinedOrBoolean(schema, 'contentIgnoreAs') ||
+        !undefinedOrBoolean(schema, 'contentIgnoresAs') ||
         !undefinedOrBoolean(schema, 'allowExtraItems') ||
         !undefinedOrBoolean(schema, 'notEmpty') ||
         (schema.validate !== undefined && typeof schema.validate !== 'function')

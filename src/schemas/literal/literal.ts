@@ -5,8 +5,6 @@ export interface Schema extends SchemaBase {
     is: unknown;
 };
 
-export const aliases = {};
-
 export const validateSchema = (schema?: any) : schema is Schema => {
     return validateSchemaBase<Schema>(schema, 'literal');
 };

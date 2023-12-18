@@ -12,10 +12,6 @@ export interface Schema extends SchemaBase {
     validate?: (value: unknown) => Promise<boolean>;
 };
 
-export const aliases = {
-    'object': { type: 'object', allowExtraProperties: true, properties: {} }
-};
-
 export const validateSchema = (schema?: any) : schema is Schema => {
     if (
         !validateSchemaBase<Schema>(schema, 'object') ||

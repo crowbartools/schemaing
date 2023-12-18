@@ -9,12 +9,6 @@ export interface Schema extends SchemaBase {
     allowEmptyString?: boolean;
 };
 
-export const aliases = {
-    'null': { type: 'null' },
-    'nullish': { type: 'null', allowUndefined: true },
-    'null~': { type: 'null', loose: true }
-};
-
 export const validateSchema = (schema?: any) : schema is Schema => (
     validateSchemaBase<Schema>(schema, 'null') &&
     undefinedOrBoolean(schema, 'loose') &&

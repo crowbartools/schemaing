@@ -10,10 +10,6 @@ export interface Schema extends SchemaBase {
     values: Schemas | Schemas[];
 };
 
-export const aliases = {
-    'record': { type: 'record', keys: 'string!', values: 'any'}
-};
-
 export const validateSchema = (schema?: any) : schema is Schema => {
     if (
         !validateSchemaBase<Schema>(schema, 'record') ||
