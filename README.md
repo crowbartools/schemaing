@@ -1,6 +1,25 @@
 # Schemaing
 This is a work-in-progress repository for a schema-based validator
 
+### Install
+*Pending NPM publishing*
+
+### Importing
+
+For ESM/Modules
+```js
+import { default as validate, validateSchema, use } from 'schemaing'
+```
+
+For CommonJS
+```js
+const { default: validate, validateSchema, use } = require('schemaing');
+```
+
+### Usage
+See [Documentation](./docs/README.md)
+
+
 # License
 Copyright 2023 CrowbarTools
 
