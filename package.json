@@ -21,6 +21,7 @@
     },
 
     "author": "CrowbarTools (https://discord.gg/DegW792)",
+    "license": "ISC",
 
     "source": "./src/index.ts",
     "type": "module",
