@@ -3,9 +3,6 @@ All things listed here are required before the v1.0.0 release
 
 # Development
 
-### src/schemas/_base.ts
-* Tests
-
 ### src/schemas/array.ts
 * Validate validateSchema()'s schema.content
 * Validate validateSchema()'s schema.as
