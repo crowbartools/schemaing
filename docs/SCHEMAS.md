@@ -3,7 +3,7 @@
 A schema is a definition that an input is to be validated against. Schemaing supports equivulants to all JSON types aswell as a few QoL aliases
 
 
-## Any
+### Any
 The `any` Schema represents a value that can be anything
 
 | Property | Value | Required | Description |
@@ -11,14 +11,14 @@ The `any` Schema represents a value that can be anything
 | `type` | `'any'` | yes | |
 | `validate` | [`Validate`]() | no | Validator function to call if the input passes internal |
 
-### Examples
+#### Examples
 ```js
 { type: 'any' }
 { type: 'any', validate: value => value != null }
 ```
 
 
-## Literal
+### Literal
 The `literal` Schema represents an exact value.
 
 | Property | Value | Required | Description |
@@ -26,25 +26,26 @@ The `literal` Schema represents an exact value.
 | `type` | `'literal'` | yes | |
 | `is` | `any` | yes | Input must exactly match the given value |
 
+#### Examples
 ```js
 { type: 'literal', is: 'example' }
 ```
 
 
-## Undefined
+### Undefined
 The `undefined` Schema represents a value being undefined
 
 | Property | Value | Required | Description |
 |--|--|--|--|
 | `type` | `'undefined'` | yes | |
 
-### Examples
+#### Examples
 ```js
 { type: 'undefined' }
 ```
 
 
-## Null
+### Null
 The `null` Schema represents a value declared as null or seemingly empty
 
 | Property | Value | Required | Description |
@@ -55,7 +56,7 @@ The `null` Schema represents a value declared as null or seemingly empty
 | `allowEmptyString` | `boolean` | no | treat empty strings as null |
 | `loose` | `boolean` | no | treat `undefined`, `0`, and empty strings as null |
 
-### Examples
+#### Examples
 ```js
 { type: 'null' }
 { type: 'null', allowUndefined: true }
@@ -66,7 +67,7 @@ The `null` Schema represents a value declared as null or seemingly empty
 ```
 
 
-## Boolean
+### Boolean
 The `boolean` Schema represents a true or false value
 
 | Property | Value | Required | Description |
@@ -74,7 +75,7 @@ The `boolean` Schema represents a true or false value
 | `type` | `'boolean'` | yes | |
 | `is` | `boolean` | no | Input must be the specified value |
 
-### Examples
+#### Examples
 ```js
 { type: 'boolean' }
 { type: 'boolean', is: true }
@@ -82,7 +83,7 @@ The `boolean` Schema represents a true or false value
 ```
 
 
-## Number
+### Number
 The `number` Schema represents numerical values
 
 | Property | Value | Required | Description |
@@ -105,9 +106,11 @@ The `number` Schema represents numerical values
 | `under` | `number` | no | The input must be less than the given value value |
 
 \* `min` cannot be specified with `over`
+
 \* `max` cannot be specified with `under`
 
-### Examples
+
+#### Examples
 ```js
 { type: 'number' }
 { type: 'number', loose: true }
@@ -121,7 +124,7 @@ The `number` Schema represents numerical values
 { type: 'number', validate: value => value < 100 }
 ```
 
-## String
+### String
 The `string` Schema represents text values
 
 | Property | Value | Required | Description |
@@ -133,7 +136,7 @@ The `string` Schema represents text values
 | `is` | `string` | no | Input must be the given value |
 | `validate` | [`Validate`]() | no | Validator function to call if the input passes internal | tests |
 
-### Examples
+#### Examples
 ```js
 { type: 'string' }
 { type: 'string', loose: true }
@@ -144,26 +147,96 @@ The `string` Schema represents text values
 ```
 
 
-## Symbol
+### Symbol
 The `symbol` Schema represents a Symbol value
 | Property | Value | Required | Description |
 |--|--|--|--|
 | `type` | `'symbol'` | yes | |
 
-### Examples
+#### Examples
 ```js
 { type: 'symbol' }
 ```
 
 
-## Array
-todo
+### Array
 
-## Object
-todo
+The `array` Schema represents an order lists of values
 
-## Record
-todo
+| Property | Value | Required | Description |
+|--|--|--|--|
+| `type` | `'array'` | yes | |
+| `notEmpty` | `boolean` | yes | The input must not be empty |
+| `as` | `Schema | Schema[]` | no | All items of the value must match the specified schema |
+| `content` | `Array<Schema | Schema[]>` | no | Value's first items must match the specified items in order |
+| `contentIgnoresAs` | `boolean` | no | Items constrainted by `content` will not be constrained by `as` |
+| `validate` | [Validator]() | no | Validator function to call if the input passes internal |
+
+\* If `content` is not specified then `as` MUST be specified.
+
+#### Examples
+```js
+{ type: 'array', as: 'any' }
+{ type: 'array' content: ['string'] }
+{ type: 'array', as: ['string', 'number'] }
+{ type: 'array', as: ['string', 'number'], content: ['string'] }
+// TODO: More
+```
+
+
+### Object
+
+The `object` Schema represents an unorder lists of known key-value items
+
+| Property | Value | Required | Description |
+|--|--|--|--|
+| `type` | `'object'` | yes | |
+| `properties` | `Properties` | yes | Properties the value must contain |
+| `allowExtraProperties` | `boolean` | no | Allows the value to contain properties not listed by `properties` |
+| `validate` | [Validator]() | no | Validator function to call if the input passes internal tests |
+
+#### Properties
+`properties` is an object literal containing known keys and their respective schema
+
+The schema of each property follows one of two formats
+
+An Extension of each Schema:
+| Property | Value | Required | Description |
+|--|--|--|--|
+| ...Schema | | | The Schema constraint of the property |
+| `optional` | `boolean` | no | The property is optional |
+
+A list of Schemas
+| Property | Value | Required | Description |
+|--|--|--|--|
+| `types` | Schema[] | yes | A list of schemas the property must match |
+| `optional` | `boolean` | no | Indicates if the property is optional |
+
+
+#### Examples
+```js
+{ type: 'object', properties: {{ 'key': { type: 'number', integer: true }}}}
+{ type: 'object', properties: {{ 'key': { types: ['string', 'number'] }}}}
+// TODO: more
+```
+
+
+### Record
+
+The `record` Schema represents an unorder lists of unknown key-value items
+
+| Property | Value | Required | Description |
+|--|--|--|--|
+| `type` | `'record'` | yes | |
+| `keys` | `RecordKeys | RecordKeys[]` | yes | Schema to apply to the keys of the value |
+| `values` | `Schema | Schema[]` | yes | Schema to apply to values associated with each key |
+| `validate` | [`Validator`]() | no | Validator function to call if the input passes internal tests |
+
+
+#### Examples
+```js
+// TODO
+```
 
 
 # Schema Aliases

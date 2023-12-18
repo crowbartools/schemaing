@@ -11,9 +11,9 @@ All things listed here are required before the v1.0.0 release
 * `validate()`
 * `validateSchema()`
 * `use()`
-* Array Schema
-* Object Schema
-* Record Schema
+* Array Schema: add more examples
+* Object Schema: add more examples
+* Record Schema: add examples
 * Schema `Validator` function
 
 ## Build & Publish
