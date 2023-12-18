@@ -170,7 +170,7 @@ The `array` Schema represents an order lists of values
 | `as` | `Schema | Schema[]` | no | All items of the value must match the specified schema |
 | `content` | `Array<Schema | Schema[]>` | no | Value's first items must match the specified items in order |
 | `contentIgnoresAs` | `boolean` | no | Items constrainted by `content` will not be constrained by `as` |
-| `validate` | [Validator]() | no | Validator function to call if the input passes internal |
+| `validate` | [Validate]() | no | Validator function to call if the input passes internal |
 
 \* If `content` is not specified then `as` MUST be specified.
 
@@ -193,7 +193,7 @@ The `object` Schema represents an unorder lists of known key-value items
 | `type` | `'object'` | yes | |
 | `properties` | `Properties` | yes | Properties the value must contain |
 | `allowExtraProperties` | `boolean` | no | Allows the value to contain properties not listed by `properties` |
-| `validate` | [Validator]() | no | Validator function to call if the input passes internal tests |
+| `validate` | [Validate]() | no | Validator function to call if the input passes internal tests |
 
 #### Properties
 `properties` is an object literal containing known keys and their respective schema
@@ -203,13 +203,13 @@ The schema of each property follows one of two formats
 An Extension of each Schema:
 | Property | Value | Required | Description |
 |--|--|--|--|
-| ...Schema | | | The Schema constraint of the property |
+| `...Schema`` | | | The Schema constraint of the property |
 | `optional` | `boolean` | no | The property is optional |
 
-A list of Schemas
+A list of Schemas:
 | Property | Value | Required | Description |
 |--|--|--|--|
-| `types` | Schema[] | yes | A list of schemas the property must match |
+| `types` | `Schema[]` | yes | A list of schemas the property must match |
 | `optional` | `boolean` | no | Indicates if the property is optional |
 
 
@@ -230,12 +230,33 @@ The `record` Schema represents an unorder lists of unknown key-value items
 | `type` | `'record'` | yes | |
 | `keys` | `RecordKeys | RecordKeys[]` | yes | Schema to apply to the keys of the value |
 | `values` | `Schema | Schema[]` | yes | Schema to apply to values associated with each key |
-| `validate` | [`Validator`]() | no | Validator function to call if the input passes internal tests |
+| `validate` | [`Validate`]() | no | Validator function to call if the input passes internal tests |
+
+#### RecordKeys
+A constrained list of schemas:
+
+* `string` Schema
+* `symbol` Schema
+* `'string'` Alias
+* `'string!'` Alias
+* `'symbol'` Alias
 
 
 #### Examples
 ```js
-// TODO
+{ type: 'record', keys: 'string', values: 'any' }
+// TODO: more
+```
+
+# Validate
+The validate function is called after all internal tests for the respective schema are successful
+
+```ts
+/**
+ * @param {unknown} value The value that was validated by the schema
+ * @returns {Promise<boolean>} The function must resolve to a boolean value indicating if the value passed validation
+ */
+const validate = (value: unknown) => Promise<boolean>
 ```
 
 

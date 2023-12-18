@@ -13,8 +13,8 @@ All things listed here are required before the v1.0.0 release
 * `use()`
 * Array Schema: add more examples
 * Object Schema: add more examples
-* Record Schema: add examples
-* Schema `Validator` function
+* Record Schema: add more examples
+* Fix links to validate doc
 
 ## Build & Publish
 * Protect master branch
