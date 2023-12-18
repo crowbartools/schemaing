@@ -27,14 +27,15 @@
 
     "type": "module",
     "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
     "exports": {
         "types": "./dist/index.d.ts",
         "require": "./dist/index.cjs",
-        "default": "./dist/index.esm.js"
+        "default": "./dist/index.js"
     },
     "scripts": {
         "test": "jest",
-        "build": "microbundle --target=node  --format=esm,cjs"
+        "build": "microbundle --target=node  --format=modern,cjs"
     },
     "devDependencies": {
         "jest": "29.1.1",
