@@ -24,12 +24,13 @@
     "license": "ISC",
 
     "source": "./src/index.ts",
+
     "type": "module",
     "main": "./dist/index.cjs",
     "exports": {
         "types": "./dist/index.d.ts",
         "require": "./dist/index.cjs",
-        "default": "./dist/index.js"
+        "default": "./dist/index.esm.js"
     },
     "scripts": {
         "test": "jest",

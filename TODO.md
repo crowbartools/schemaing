@@ -1,7 +1,7 @@
 # Info
 All things listed here are required before the v1.0.0 release
 
-# Development
+## Development
 
 ### src/schemas/array.ts
 * Validate validateSchema()'s schema.content
@@ -20,11 +20,12 @@ All things listed here are required before the v1.0.0 release
 ### src/index.ts
 * Tests
 
-# Toolings
+## Toolings
 * Setup ESLint
 
-# Documentation
+## Documentation
 * Everything
 
-# Build & Publish
+## Build & Publish
+* Protect master branch
 * Github Actions Logic
