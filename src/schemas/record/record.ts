@@ -8,6 +8,7 @@ export interface Schema extends SchemaBase {
     type: 'record';
     keys: RecordKeysSchema | RecordKeysSchema[];
     values: Schemas | Schemas[];
+    validate?: (value: unknown) => Promise<boolean>;
 };
 
 export const validateSchema = (schema?: any) : schema is Schema => {
@@ -40,10 +41,10 @@ export const validateSchema = (schema?: any) : schema is Schema => {
 };
 
 export default async (schema: any, value: unknown) : Promise<boolean> => {
-    if (!validateSchema(schema)) {
-        return false;
-    }
-    if (value == null || typeof value !== 'object' || Array.isArray(value)) {
+    if (
+        !validateSchema(schema) ||
+        value == null
+    ) {
         return false;
     }
     const keysList = Array.isArray(schema.keys) ? schema.keys : [schema.keys];
@@ -69,6 +70,9 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
         if (!isValid) {
             return false;
         }
+    }
+    if (schema.validate !== undefined) {
+        return await schema.validate(value);
     }
     return true;
 };
