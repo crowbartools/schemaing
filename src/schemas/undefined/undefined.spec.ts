@@ -20,8 +20,7 @@ describe('Schema: Undefined', () => {
         it('false when schema is invalid', async () => {
             // @ts-ignore
             expect(await validateAgainstSchema()).toBe(false);
-            // @ts-ignore
-            expect(await validateAgainstSchema({ type: 'invalid' })).toBe(false);
+            expect(await validateAgainstSchema({ type: 'invalid' }, undefined)).toBe(false);
         });
         it('validates value against schema', async () => {
             // @ts-ignore

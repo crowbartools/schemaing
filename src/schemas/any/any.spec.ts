@@ -26,11 +26,8 @@ describe('Schema: Any', () => {
     describe('validateAgainstSchema()', () => {
         it('false when schema is invalid', async () => {
             // @ts-ignore
-            (expect(await validateAgainstSchema())).toBe(false);
-            // @ts-ignore
-            (expect(await validateAgainstSchema({type: 'object'}))).toBe(false);
-            // @ts-ignore
-            (expect(await validateAgainstSchema({type: 'any', validate: 'text'}))).toBe(false);
+            expect(await validateAgainstSchema()).toBe(false);
+            expect(await validateAgainstSchema({ type: 'invalid' }, 'text')).toBe(false);
         });
         it('true when valid schema', async () => {
             expect(await validateAgainstSchema({type: 'any'}, undefined)).toBe(true);

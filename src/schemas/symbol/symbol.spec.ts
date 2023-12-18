@@ -19,8 +19,7 @@ describe('Schema: Symbol', () => {
         it('false when schema is invalid', async () => {
             // @ts-ignore
             expect(await validateAgainstSchema()).toBe(false);
-            // @ts-ignore
-            expect(await validateAgainstSchema({ type: 'invalid' })).toBe(false);
+            expect(await validateAgainstSchema({ type: 'invalid' }, Symbol('test'))).toBe(false);
         });
         it('validates value against schema', async () => {
             expect(await validateAgainstSchema({ type: 'symbol' }, Symbol('test'))).toBe(true);

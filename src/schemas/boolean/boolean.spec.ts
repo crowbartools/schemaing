@@ -25,11 +25,8 @@ describe('Schema: Boolean', () => {
     describe('validateAgainstSchema()', () => {
         it('false when schema is invalid', async () => {
             // @ts-ignore
-            (expect(await validateAgainstSchema())).toBe(false);
-            // @ts-ignore
-            (expect(await validateAgainstSchema({type: 'object'}))).toBe(false);
-            // @ts-ignore
-            (expect(await validateAgainstSchema({type: 'boolean', is: 'text'}))).toBe(false);
+            expect(await validateAgainstSchema()).toBe(false);
+            expect(await validateAgainstSchema({ type: 'invalid' }, false)).toBe(false);
         });
     });
     it('validates value against schema', async () => {

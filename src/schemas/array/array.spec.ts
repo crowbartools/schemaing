@@ -60,7 +60,8 @@ describe('Schema: Array', () => {
     describe('validateAgainstSchema()', () => {
         it('false when schema is invalid', async () => {
             // @ts-ignore
-            expect(await validateAgainstSchema({ type: 'invalid' })).toBe(false);
+            expect(await validateAgainstSchema()).toBe(false);
+            expect(await validateAgainstSchema({ type: 'invalid' }, [])).toBe(false);
         });
         it('validates against schema', async () => {
             expect(await validateAgainstSchema({ type: 'array' }, [])).toBe(true);

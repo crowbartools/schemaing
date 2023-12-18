@@ -59,7 +59,8 @@ describe('Schema: String', () => {
     describe('validateAgainstSchema()', () => {
         it('false when schema is invalid', async () => {
             // @ts-ignore
-            expect(await validateAgainstSchema({ type: 'invalid' })).toBe(false);
+            expect(await validateAgainstSchema()).toBe(false);
+            expect(await validateAgainstSchema({ type: 'invalid' }, 'invalid')).toBe(false);
         });
         it('validates against schema', async () => {
             expect(await validateAgainstSchema({ type: 'string' }, 'text')).toBe(true);

@@ -45,6 +45,11 @@ describe('Schema: Object', () => {
         });
     });
     describe('validateAgainstSchema()', () => {
+        it('false when schema is invalid', async () => {
+            // @ts-ignore
+            expect(await validateAgainstSchema()).toBe(false);
+            expect(await validateAgainstSchema({ type: 'invalid' }, {})).toBe(false);
+        });
         it('validates against schema', async () => {
             expect(await validateAgainstSchema({ type: 'object', properties: {}}, {})).toBe(true);
             expect(await validateAgainstSchema({ type: 'object', properties: {}}, undefined)).toBe(false);
