@@ -3,9 +3,6 @@ All things listed here are required before the v1.0.0 release
 
 ## Development
 
-### src/schemas/object.ts
-* Tests
-
 ### src/schemas/record.ts
 * Tests
 

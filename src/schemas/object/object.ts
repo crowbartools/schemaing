@@ -22,7 +22,11 @@ export const validateSchema = (schema?: any) : schema is Schema => {
         return false
     }
     for (const [key, constraint] of Object.entries(schema.properties)) {
-        if (typeof key !== 'string' && typeof key !== 'symbol') {
+        if (
+            constraint.optional !== undefined &&
+            constraint.optional !== false &&
+            constraint.optional !== true
+        ) {
             return false;
         }
         if ((<any>constraint).types) {
@@ -43,10 +47,7 @@ export const validateSchema = (schema?: any) : schema is Schema => {
 };
 
 export default async (schema: any, value: unknown) : Promise<boolean> => {
-    if (!validateSchema(schema)) {
-        return false;
-    }
-    if (value == null || typeof value !== 'object' || Array.isArray(value)) {
+    if (!validateSchema(schema) || value == null) {
         return false;
     }
     for (const [propKey, propSchema] of Object.entries(schema.properties)) {
@@ -54,9 +55,8 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
             if (propSchema.optional !== true) {
                 return false;
             }
-            continue;
-        }
-        if ((<any>propSchema).types != null) {
+
+        } else if ((<any>propSchema).types != null) {
             let valid = false;
             for (const constraint of (<{ types: Schemas[] }>propSchema).types) {
                 if (await validateAgainstSchema(constraint, (<any>value)[propKey])) {
@@ -67,9 +67,7 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
             if (!valid) {
                 return false;
             }
-            continue;
-        }
-        if (!await validateAgainstSchema(<Schemas>propSchema, (<any>value)[propKey])) {
+        } else if (!await validateAgainstSchema(<Schemas>propSchema, (<any>value)[propKey])) {
             return false;
         }
     }
