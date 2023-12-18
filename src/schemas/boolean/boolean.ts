@@ -3,7 +3,7 @@ import { validateSchema as validateSchemaBase, SchemaBase } from '../_base';
 export interface Schema extends SchemaBase {
     type: 'boolean';
     is?: boolean;
-}
+};
 
 export const aliases = {
     'boolean': { type: 'boolean' },

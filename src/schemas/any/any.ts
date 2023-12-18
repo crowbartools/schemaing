@@ -1,10 +1,9 @@
 import { validateSchema as validateSchemaBase, SchemaBase } from '../_base';
 
-// Any/Unknown
 export interface Schema extends SchemaBase {
     type: 'any' | 'unknown';
     validate?: (value: unknown) => Promise<boolean>;
-}
+};
 
 export const aliases = {
     'any': { type: 'any' },

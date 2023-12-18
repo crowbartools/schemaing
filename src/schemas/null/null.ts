@@ -1,5 +1,4 @@
 import { validateSchema as validateSchemaBase, SchemaBase } from '../_base';
-
 import undefinedOrBoolean from '../../common/undefined-or-boolean';
 
 export interface Schema extends SchemaBase {
@@ -8,7 +7,7 @@ export interface Schema extends SchemaBase {
     allowUndefined?: boolean;
     allowZero?: boolean;
     allowEmptyString?: boolean;
-}
+};
 
 export const aliases = {
     'null': { type: 'null' },
@@ -28,7 +27,6 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
     if (!validateSchema(schema)) {
         return false;
     }
-
     return true === (
         value === null || (
             (schema.loose || schema.allowUndefined) &&

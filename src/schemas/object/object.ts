@@ -1,12 +1,5 @@
 import { validateSchema as validateSchemaBase, SchemaBase } from '../_base';
-
-import {
-    default as validateAgainstSchema,
-    validateSchema as validateGlobalSchema,
-    SchemaDefinitions,
-    Schema as Schemas
-} from '../../index';
-
+import { default as validateAgainstSchema, validateSchema as validateGlobalSchema, SchemaDefinitions, Schema as Schemas } from '../../index';
 import undefinedOrBoolean from '../../common/undefined-or-boolean';
 
 export interface Schema extends SchemaBase {

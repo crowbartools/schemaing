@@ -70,7 +70,6 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
     if (!schema.content && !schema.as) {
         return true;
     }
-
     let idx = 0;
     if (schema.content) {
         if (value.length < schema.content.length) {

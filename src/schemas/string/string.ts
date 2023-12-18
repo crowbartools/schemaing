@@ -1,5 +1,4 @@
 import { validateSchema as validateSchemaBase, SchemaBase } from '../_base';
-
 import undefinedOrBoolean from '../../common/undefined-or-boolean';
 
 export interface Schema extends SchemaBase {
@@ -9,12 +8,12 @@ export interface Schema extends SchemaBase {
     match?: RegExp;
     is?: string;
     validate?: (value: unknown) => Promise<boolean>;
-}
+};
 
 export const aliases = {
     'string': { type: 'string' },
     'string!': { type: 'string', notEmpty: true }
-}
+};
 
 export const validateSchema = (schema?: any) : schema is Schema => (
     (
@@ -35,16 +34,13 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
     if (schema.loose) {
         if (value == null) {
             value = '';
-
         } else if (typeof value === 'boolean') {
             value = '' + value;
-
         } else if (typeof value === 'number') {
             if (!Number.isFinite(value)) {
                 return false;
             }
             value = '' + value;
-
         } else if (value instanceof String) {
             value = value.valueOf();
         }
