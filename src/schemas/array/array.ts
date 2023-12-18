@@ -5,7 +5,6 @@ import undefinedOrBoolean from '../../common/undefined-or-boolean';
 export interface Schema extends SchemaBase {
     type: 'array';
     contentIgnoresAs?: boolean;
-    allowExtraItems?: boolean;
     notEmpty?: boolean;
     content?: Array<Schemas | Schemas[]>;
     as?: Schemas | Schemas[];
@@ -17,7 +16,6 @@ export const validateSchema = (schema?: any) : schema is Schema => {
         !validateSchemaBase<Schema>(schema, 'array') ||
         (schema.content !== undefined && !Array.isArray(schema.content)) ||
         !undefinedOrBoolean(schema, 'contentIgnoresAs') ||
-        !undefinedOrBoolean(schema, 'allowExtraItems') ||
         !undefinedOrBoolean(schema, 'notEmpty') ||
         (schema.validate !== undefined && typeof schema.validate !== 'function')
     ) {
@@ -26,6 +24,9 @@ export const validateSchema = (schema?: any) : schema is Schema => {
     if (schema.content != null) {
         for (const constraint of schema.content) {
             if (Array.isArray(constraint)) {
+                if (constraint.length === 0) {
+                    return false;
+                }
                 for (const sub of constraint) {
                     if (!validateGlobalSchema(sub)) {
                         return false;
@@ -57,43 +58,41 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
     if (schema.notEmpty && value.length === 0) {
         return false;
     }
-    if (!schema.content && !schema.as) {
-        return true;
-    }
+
     let idx = 0;
-    if (schema.content) {
+    if (schema.content !== undefined) {
+
         if (value.length < schema.content.length) {
             return false;
         }
-        for (const contentConstraint of schema.content) {
+
+        for (const constraints of schema.content) {
             const entry = value[idx];
-            let valid = false,
-                constraints = contentConstraint;
-            if (!Array.isArray(constraints)) {
-                constraints = [constraints];
-            }
-            for (const constraint of constraints) {
-                if (await validateAgainstSchema(constraint, entry)) {
-                    valid = true;
-                    break;
+            if (Array.isArray(constraints)) {
+                let valid = false;
+                for (const constraint of constraints) {
+                    if (await validateAgainstSchema(constraint, entry)) {
+                        valid = true;
+                        break;
+                    }
                 }
-            }
-            if (!valid) {
+                if (!valid) {
+                    return false;
+                }
+            } else if (!await validateAgainstSchema(constraints, entry)) {
                 return false;
             }
             idx += 1;
         }
-        if (schema.allowExtraItems !== true && idx < value.length) {
+        if (schema.as === undefined && idx < value.length) {
             return false;
-        }
-        if (!schema.as) {
-            return true;
         }
         if (schema.contentIgnoresAs !== true) {
             idx = 0;
         }
     }
-    if (schema.as) {
+
+    if (schema.as !== undefined) {
         const entries = value.slice(idx);
         const asConstraint = Array.isArray(schema.as) ? schema.as : [schema.as];
         for (const entry of entries) {
