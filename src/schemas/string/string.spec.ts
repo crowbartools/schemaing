@@ -92,7 +92,6 @@ describe('Schema: String', () => {
         });
         it('calls .validate', async () => {
             const validate = jest.fn((value: unknown) => value === 'test');
-            // @ts-ignore
             const result = await validateAgainstSchema({ type: 'string', validate: validate }, 'test');
             expect(result).toBe(true);
             expect(validate.mock.calls).toHaveLength(1);
