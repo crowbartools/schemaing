@@ -7,7 +7,6 @@ All things listed here are required before the v1.0.0 release
 * Tests
 
 ### src/schemas/object.ts
-* Validate validateSchema()'s schema.properties
 * Tests
 
 ### src/schemas/record.ts

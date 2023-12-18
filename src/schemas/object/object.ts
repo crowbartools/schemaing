@@ -2,6 +2,7 @@ import { validateSchema as validateSchemaBase, SchemaBase } from '../_base';
 
 import {
     default as validateAgainstSchema,
+    validateSchema as validateGlobalSchema,
     SchemaDefinitions,
     Schema as Schemas
 } from '../../index';
@@ -16,26 +17,41 @@ export interface Schema extends SchemaBase {
     )>;
     allowExtraProperties?: boolean;
     validate?: (value: unknown) => Promise<boolean>;
-}
+};
 
 export const aliases = {
     'object': { type: 'object', allowExtraProperties: true, properties: {} }
-}
+};
 
 export const validateSchema = (schema?: any) : schema is Schema => {
     if (
         !validateSchemaBase<Schema>(schema, 'object') ||
         !undefinedOrBoolean(schema, 'allowExtraProperties') ||
-        (schema.validate != null && typeof schema.validate !== 'function') ||
+        (schema.validate !== undefined && typeof schema.validate !== 'function') ||
         schema.properties == null
     ) {
         return false
     }
-
-    // TODO: validate property list
-
+    for (const [key, constraint] of Object.entries(schema.properties)) {
+        if (typeof key !== 'string' && typeof key !== 'symbol') {
+            return false;
+        }
+        if ((<any>constraint).types) {
+            const types = (<any>constraint).types;
+            if (!Array.isArray(types) || types.length === 0) {
+                return false;
+            }
+            for (const sub of types) {
+                if (!validateGlobalSchema(sub)) {
+                    return false;
+                }
+            }
+        } else if (!validateGlobalSchema(constraint)) {
+            return false;
+        }
+    }
     return true;
-}
+};
 
 export default async (schema: any, value: unknown) : Promise<boolean> => {
     if (!validateSchema(schema)) {
@@ -44,7 +60,6 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
     if (value == null || typeof value !== 'object' || Array.isArray(value)) {
         return false;
     }
-
     for (const [propKey, propSchema] of Object.entries(schema.properties)) {
         if ((<any>value)[propKey] === undefined) {
             if (propSchema.optional !== true) {
@@ -52,8 +67,6 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
             }
             continue;
         }
-
-        // property.types[]
         if ((<any>propSchema).types != null) {
             let valid = false;
             for (const constraint of (<{ types: Schemas[] }>propSchema).types) {
@@ -67,13 +80,10 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
             }
             continue;
         }
-
-        // property.type = ...
         if (!await validateAgainstSchema(<Schemas>propSchema, (<any>value)[propKey])) {
             return false;
         }
     }
-
     if (schema.allowExtraProperties !== true) {
         for (const propKey of Object.keys(value)) {
             if (schema.properties[propKey] === undefined) {
@@ -81,7 +91,6 @@ export default async (schema: any, value: unknown) : Promise<boolean> => {
             }
         }
     }
-
     if (schema.validate) {
         return await schema.validate(value);
     }
