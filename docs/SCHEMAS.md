@@ -9,7 +9,7 @@ The `any` Schema represents a value that can be anything
 | Property | Value | Required | Description |
 |--|--|--|--|
 | `type` | `'any'` | yes | |
-| `validate` | [`Validate`](#validate) | no | Validator function to call if the input passes internal |
+| `validate` | [`Validate`](#validate) | no | Validator function to call if the input passes internal tests |
 
 #### Examples
 ```js
@@ -212,7 +212,6 @@ A list of Schemas:
 | `types` | `Schema[]` | yes | A list of schemas the property must match |
 | `optional` | `boolean` | no | Indicates if the property is optional |
 
-
 #### Examples
 ```js
 { type: 'object', properties: {{ 'key': { type: 'number', integer: true }}}}
@@ -240,7 +239,6 @@ A constrained list of schemas:
 * `'string'` Alias
 * `'string!'` Alias
 * `'symbol'` Alias
-
 
 #### Examples
 ```js
