@@ -17,12 +17,21 @@ describe('Schema: Object', () => {
         it('validates .properties', () => {
             expect(validateSchema({ type: 'object', properties: undefined })).toBe(false);
             expect(validateSchema({ type: 'object', properties: null })).toBe(false);
+            expect(validateSchema({ type: 'object', properties: { 'key': 'string' }})).toBe(true);
+            expect(validateSchema({ type: 'object', properties: { 'key': ['boolean', 'string'] }})).toBe(true);
             expect(validateSchema({ type: 'object', properties: { 'key': { type: 'string' }}})).toBe(true);
             expect(validateSchema({ type: 'object', properties: { 'key': { type: 'invalid' }}})).toBe(false);
+
+            expect(validateSchema({ type: 'object', properties: { 'key': 'invalid' }})).toBe(false);
+            expect(validateSchema({ type: 'object', properties: { 'key': [] }})).toBe(false);
+            expect(validateSchema({ type: 'object', properties: { 'key': ['invalid'] }})).toBe(false);
+
             expect(validateSchema({ type: 'object', properties: { 'key': { optional: undefined, type: 'string' }}})).toBe(true);
             expect(validateSchema({ type: 'object', properties: { 'key': { optional: false, type: 'string' }}})).toBe(true);
             expect(validateSchema({ type: 'object', properties: { 'key': { optional: true, type: 'string' }}})).toBe(true);
             expect(validateSchema({ type: 'object', properties: { 'key': { optional: 'invalid', type: 'string' }}})).toBe(false);
+
+            expect(validateSchema({ type: 'object', properties: { 'key': { types: 'string' }}})).toBe(true);
             expect(validateSchema({ type: 'object', properties: { 'key': { types: ['string'] }}})).toBe(true);
             expect(validateSchema({ type: 'object', properties: { 'key': { types: 'invalid' }}})).toBe(false);
             expect(validateSchema({ type: 'object', properties: { 'key': { types: [] }}})).toBe(false);
@@ -51,13 +60,18 @@ describe('Schema: Object', () => {
             expect(await validateAgainstSchema({ type: 'invalid' }, {})).toBe(false);
         });
         it('validates against schema', async () => {
+            expect(await validateAgainstSchema({ type: 'object', properties: { key: 'string' }}, { key: 'item' })).toBe(true);
+            expect(await validateAgainstSchema({ type: 'object', properties: { key: 'string' }}, { key: true })).toBe(false);
+            expect(await validateAgainstSchema({ type: 'object', properties: { key: ['string'] }}, { key: 'item' })).toBe(true);
+            expect(await validateAgainstSchema({ type: 'object', properties: { key: ['string', 'number'] }}, { key: true })).toBe(false);
             expect(await validateAgainstSchema({ type: 'object', properties: {}}, {})).toBe(true);
             expect(await validateAgainstSchema({ type: 'object', properties: {}}, undefined)).toBe(false);
             expect(await validateAgainstSchema({ type: 'object', properties: {}}, null)).toBe(false);
             expect(await validateAgainstSchema({ type: 'object', properties: { key: { type: 'any'}}}, {})).toBe(false);
-            expect(await validateAgainstSchema({ type: 'object', properties: { key: { types: ['string', 'boolean'] }}}, { key: true })).toBe(true)
+            expect(await validateAgainstSchema({ type: 'object', properties: { key: { types: ['string', 'boolean'] }}}, { key: true })).toBe(true);
             expect(await validateAgainstSchema({ type: 'object', properties: { key: { types: ['string', 'boolean'] }}}, { key: null })).toBe(false);
             expect(await validateAgainstSchema({ type: 'object', properties: { key: { type: 'boolean' }}}, { key: 'item' })).toBe(false);
+            expect(await validateAgainstSchema({ type: 'object', properties: { key: { types: 'string' }}}, { key: false })).toBe(false);
             expect(await validateAgainstSchema({ type: 'object', properties: { key: { type: 'any'} }, allowExtraProperties: false }, {key: 'value'})).toBe(true);
             expect(await validateAgainstSchema({ type: 'object', properties: { key: { type: 'any'} }, allowExtraProperties: false }, {key: 'value', key2: 'value'})).toBe(false);
         });

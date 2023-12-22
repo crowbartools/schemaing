@@ -37,7 +37,9 @@ const aliases = {
     'undefined': { type: 'undefined' },
     'void': { type: 'undefined' }
 };
-const schemaAliases : Map<string, SchemaBase> = new Map(Object.entries(aliases));
+export const schemaAliasList : Map<string, SchemaBase> = new Map(Object.entries(aliases));
+
+export type SchemaAliases = (keyof typeof aliases);
 
 export type SchemaDefinitions = (
     schemaAny.Schema
@@ -53,14 +55,14 @@ export type SchemaDefinitions = (
     | schemaUndefined.Schema
 );
 
-export type Schema = (SchemaDefinitions | keyof typeof aliases);
+export type Schema = (SchemaDefinitions | SchemaAliases);
 
 export const validateSchema = (schema: unknown) : boolean => {
     if (typeof schema === 'string') {
-        if (!schemaAliases.has(schema)) {
+        if (!schemaAliasList.has(schema)) {
             return false;
         }
-        schema = <any>schemaAliases.get(schema + '');
+        schema = <any>schemaAliasList.get(schema + '');
     }
 
     if (schema == null || typeof (<any>schema).type !== 'string') {
@@ -85,10 +87,10 @@ export const validateSchema = (schema: unknown) : boolean => {
 const validate = async (schema: Schema, value: unknown) : Promise<boolean> => {
 
     if (typeof schema === 'string') {
-        if (!schemaAliases.has(schema)) {
+        if (!schemaAliasList.has(schema)) {
             return false;
         }
-        schema = <any>schemaAliases.get(schema);
+        schema = <any>schemaAliasList.get(schema);
     }
 
     return (

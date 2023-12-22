@@ -29,7 +29,7 @@
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
     "exports": {
-        "types": "./dist/index.d.ts",
+        "types": "./dist/src/index.d.ts",
         "require": "./dist/index.cjs",
         "default": "./dist/index.js"
     },
